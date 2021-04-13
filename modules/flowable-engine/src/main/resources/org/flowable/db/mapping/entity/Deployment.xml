@@ -91,11 +91,11 @@
   <!-- DEPLOYMENT SELECT -->
 
   <select id="selectDeploymentsByQueryCriteria" parameterType="org.flowable.engine.impl.DeploymentQueryImpl" resultMap="deploymentResultMap">
-  	<if test="firstResult != null and firstResult &gt;= 0">${limitBefore}</if>
-    select RES.* <if test="firstResult != null and firstResult &gt;= 0">${limitBetween}</if>
+    <if test="needsPaging">${limitBeforeNew}</if>
+    SELECT RES.* <if test="needsPaging">${limitBetweenNew}</if>
     <include refid="selectDeploymentsByQueryCriteriaSql"/>
-    ${orderBy}
-    <if test="firstResult != null and firstResult &gt;= 0">${limitAfter}</if>
+    ${orderByForBody}
+    <if test="needsPaging">${limitAfterNew}</if>
   </select>
 
   <select id="selectDeploymentCountByQueryCriteria" parameterType="org.flowable.engine.impl.DeploymentQueryImpl" resultType="long">

@@ -46,11 +46,11 @@
   </select>
 
   <select id="selectEventSubscriptionByQueryCriteria" parameterType="org.flowable.eventsubscription.service.impl.EventSubscriptionQueryImpl" resultMap="eventSubscriptionResultMap">
-  	<if test="firstResult != null and firstResult &gt;= 0">${limitBefore}</if>
-    select RES.* <if test="firstResult != null and firstResult &gt;= 0">${limitBetween}</if>
+    <if test="needsPaging">${limitBeforeNew}</if>
+    SELECT RES.* <if test="needsPaging">${limitBetweenNew}</if>
     <include refid="selectEventSubscriptionByQueryCriteriaSql"/>
-    ${orderBy}
-    <if test="firstResult != null and firstResult &gt;= 0">${limitAfter}</if>
+    ${orderByForBody}
+    <if test="needsPaging">${limitAfterNew}</if>
   </select>
 
   <select id="selectEventSubscriptionCountByQueryCriteria" parameterType="org.flowable.eventsubscription.service.impl.EventSubscriptionQueryImpl" resultType="long">
