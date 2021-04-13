@@ -221,6 +221,29 @@ public class ListQueryParameterObject {
                 .collect(Collectors.joining(",", "order by ", ""));
     }
 
+    @SuppressWarnings("unused")
+    public String getOuterJoinOrderBy() {
+        if (isNeedsPaging()) {
+            if (AbstractEngineConfiguration.DATABASE_TYPE_MSSQL.equals(databaseType)) {
+                // SQL Server does not optimize the order by in the outer join.
+                // Therefore we use the row number (if paging is enabled)
+                return "order by RES.rn asc";
+            } else if (AbstractEngineConfiguration.DATABASE_TYPE_DB2.equals(databaseType)) {
+                // Sometimes we are ordering by columns which are not in the join, e.g. the definition.
+                // Therefore we use the row number (if paging is enabled)
+                return "order by RES.rnk asc";
+            } else if (AbstractEngineConfiguration.DATABASE_TYPE_ORACLE.equals(databaseType)) {
+                // Sometimes we are ordering by columns which are not in the join, e.g. the definition.
+                // Therefore we use the row number (if paging is enabled)
+                return "order by RES.rownum asc";
+            }
+        }
+        // We need to do another order by in order to make sure that the final result entries are correctly sorted.
+        // Some DBs will correctly remove this orderBy due to being identical to the on in the sub select.
+        // Postgres, Oracle are such DBs.
+        return getNewOrderBy();
+    }
+
     protected String mapOrderByToSql(OrderBy by) {
         NullHandlingOnOrder nullHandlingOnOrder = by.nullHandlingOnOrder;
         if (nullHandlingOnOrder == null) {
@@ -309,5 +332,5 @@ public class ListQueryParameterObject {
     public void setNullHandlingColumn(String nullHandlingColumn) {
         this.nullHandlingColumn = nullHandlingColumn;
     }
-    
+
 }
