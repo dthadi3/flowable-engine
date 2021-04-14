@@ -1,7 +1,7 @@
 arch:
   - amd64
   - ppc64le
-dist: bionic
+dist: focal
 language: java
 os: linux
 jdk: openjdk11
