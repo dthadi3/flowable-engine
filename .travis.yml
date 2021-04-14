@@ -1,0 +1,9 @@
+arch:
+  - amd64
+  - ppc64le
+language: java
+os: linux
+jdk: openjdk8
+export MAVEN_ARGS= -Dmaven.javadoc.skip=true -B -V --no-transfer-progress -Dhttp.keepAlive=false -Dmaven.wagon.http.pool=false -Dmaven.wagon.httpconnectionManager.ttlSeconds=120
+install:
+  - ./mvnw clean install ${MAVEN_ARGS} -Pcontent,oracle -Djdbc.url=jdbc:oracle:thin:@localhost:49153:XE -Djdbc.username=flowable -Djdbc.*** -Djdbc.driver=oracle.jdbc.driver.OracleDriver -Doracle.jdbc.version=11.2.0.4 -Doracle.jdbc.artifact=ojdbc6 -Dmaven.test.redirectTestOutputToFile=false -pl org.flowable:flowable-content-engine -am
